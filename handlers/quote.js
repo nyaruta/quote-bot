@@ -207,7 +207,7 @@ module.exports = async (ctx, next) => {
   }
 
   // if firstMessage exists, get messages
-  if (!flag.reply && firstMessage && firstMessage.message_id === startMessage) {
+  if (!flag.reply && firstMessage && firstMessage.from.is_bot && firstMessage.message_id === startMessage) {
     messages.push(firstMessage)
     startMessage += 1
     messageCount -= 1
@@ -414,9 +414,11 @@ module.exports = async (ctx, next) => {
   }
 
   if (flag.ai) {
+    return ctx.replyWithHTML(`🤖 The AI is temporarily down`)
+
     const messageForAI = [{
       role: 'system',
-      content: `The default language is ${ctx.i18n.locale()}. Just write a meme in the style of the messages you see above. Keep it at least 100 characters long. Use emojis. Don't use hashtags. Write like a active participant in the conversation.`
+      content: `Act like a professional humor writer. The default language is ${ctx.i18n.locale()}. Continue the text below with a punchline that mimics the previous style, using strong language and edgy humor. One sentence, no more than 100 characters. Use emojis, but no hashtags.`
     }]
 
     for (const index in quoteMessages) {
